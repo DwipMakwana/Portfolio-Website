@@ -499,6 +499,7 @@
     .proj-card-wrap[data-project="purple"] { border-top: 2px solid #a78bfa; }
     .proj-card-wrap[data-project="mv"]     { border-top: 2px solid #2dd4bf; }
     .proj-card-wrap[data-project="cyphernet"] { border-top: 2px solid #e8b84b; }
+    .proj-card-wrap[data-project="spacewars"] { border-top: 2px solid #2a2a2a; }
 
     /* ── NAV LOGO: display font ── */
     .nav-logo { font-family: var(--font-display); font-size: 1.1rem; letter-spacing: 1px; }
@@ -608,6 +609,141 @@
     <p class="section-sub">Selected work with real technical breakdowns — not just what it looks like, but how and why it was built.</p>
   </div>
   <div class="proj-grid">
+
+  <!-- SPACE WARS: SALVAGE -->
+  <span id="space-wars"></span><span id="space-wars-salvage"></span>
+  <div class="proj-card-wrap reveal" data-project="spacewars">
+
+    <!-- MEDIA: Replace with your gameplay screenshot or video -->
+    <div class="proj-media media-reveal">
+      <video autoplay muted loop playsinline>
+        <source src="spacewars-loop.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="proj-content">
+      <div class="proj-tag">Ubisoft Toronto NEXT 2025–2026 &nbsp;·&nbsp; Solo &nbsp;·&nbsp; C++ &nbsp;·&nbsp; Competition</div>
+      <h3 class="proj-title">Space Wars: Salvage</h3>
+      <p class="proj-desc">
+        A 3D space resource simulation built solo in C++ for the Ubisoft Toronto NEXT 2025–2026 programming competition. 
+        Features a procedurally generated infinite universe, faction-based AI fleets that mine and tow asteroids, 
+        and a fully custom 3D renderer built on top of the competition's 2D API — no OpenGL, no external libraries.
+      </p>
+
+      <div class="proj-tech">
+        <span class="tech-badge">C++</span>
+        <span class="tech-badge">Custom 3D Renderer</span>
+        <span class="tech-badge">Procedural Generation</span>
+        <span class="tech-badge">AI State Machines</span>
+        <span class="tech-badge">Physics System</span>
+        <span class="tech-badge">Rope / Towing</span>
+        <span class="tech-badge">Particle Systems</span>
+        <span class="tech-badge">CMake</span>
+      </div>
+
+      <div class="metric-row">
+        <div class="metric">
+          <div class="metric-val">∞</div>
+          <div class="metric-lbl">Procedural Universe</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val">4</div>
+          <div class="metric-lbl">Resource Types</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val">0</div>
+          <div class="metric-lbl">External Libs</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val">Solo</div>
+          <div class="metric-lbl">Built Entirely Alone</div>
+        </div>
+      </div>
+
+      <div class="proj-links">
+        <a href="https://youtu.be/y177jPqv9NI" target="_blank" class="proj-link">YouTube Demo</a>
+        <a href="https://github.com/DwipMakwana/Ubisoft-NEXT-2025-Competition" target="_blank" class="proj-link">GitHub</a>
+      </div>
+
+      <div class="breakdown">
+        <div class="breakdown-title">Technical Deep Dive</div>
+
+        <!-- ACCORDION 1 -->
+        <div class="accordion">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            Custom 3D Renderer (on a 2D API) <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>The competition API only exposed 2D drawing primitives — sprites, lines, and triangles. Rather than staying flat, a full <strong>software 3D renderer</strong> was built on top: manual vertex transformation, perspective projection, mesh rendering, a moveable 3D camera, and a lighting system — all in C++, zero OpenGL.</p>
+              <p>Meshes include spheres (planets), pyramids (player/guard ships), cubes (enemy ships), and procedurally generated asteroid shapes — each rendered via <strong>Renderer3D</strong> with per-frame rotation, scale, and position transforms.</p>
+              <div class="sys-diagram">
+                <span class="node">Mesh3D vertices</span> <span class="arrow">→</span>
+                <span class="node">Camera3D transform</span> <span class="arrow">→</span>
+                <span class="node">Perspective projection</span> <span class="arrow">→</span>
+                <span class="node">LightingSystem</span> <span class="arrow">→</span>
+                <span class="node">API DrawTriangle / DrawLine</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACCORDION 2 -->
+        <div class="accordion">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            Faction AI — Mining, Towing &amp; Combat <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>Each enemy planet spawns a fleet of <strong>AI ships</strong> that autonomously choose the mineral their planet needs most, seek out matching asteroids, claim them (preventing double-targeting), tow them home via a rope physics system, and deposit the resources. Fleets scale in size with planet desperation.</p>
+              <p>A separate <strong>AI guard system</strong> spawns 1–3 defenders per enemy planet. Guards use predictive aiming, target prioritisation (enemy ships → enemy guards → human player), and orbit their home planet when idle. Hitting a ship 3 times consecutively triggers a full <strong>planet fleet freeze</strong> for 3 seconds.</p>
+              <div class="sys-diagram">
+                <span class="node">Planet resource check</span> <span class="arrow">→</span>
+                <span class="node">Choose desired mineral</span> <span class="arrow">→</span>
+                <span class="node">Find &amp; claim asteroid</span> <span class="arrow">→</span>
+                <span class="node">Tow to planet</span> <span class="arrow">→</span>
+                <span class="node">Deposit → resources restored</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACCORDION 3 -->
+        <div class="accordion">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            Rope / Towing Physics System <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>Both the player and AI ships can grab asteroids using a <strong>fixed-length rope system</strong>. The rope uses a constraint-based solver with high stiffness and damping to prevent stretching. When towing, the asteroid's velocity is smoothly matched to the ship's velocity, and a visual rope renders between anchor points.</p>
+              <p>Asteroids have four mineral types — Iron, Water, Carbon, Energy. Depositing an asteroid at a planet transfers resources proportional to asteroid size, capped at 1–10 units per deposit to keep balance tight.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACCORDION 4 -->
+        <div class="accordion">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            Procedural Universe &amp; Planet System <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-body">
+            <div class="accordion-body-inner">
+              <p>The world uses a <strong>sector-based streaming system</strong> — a 3×3 grid of sectors loads around the player, each with a 40% chance of containing a planet. Planet names are procedurally generated from prefix/suffix arrays seeded by sector coordinates, so the same sector always produces the same planet name.</p>
+              <p>Each planet tracks 4 resource levels that slowly <strong>deplete over time</strong> at different rates. Resource gauges render as world-space bars around each planet, visible only within 50 units. Distant sectors unload automatically as the player explores, keeping memory bounded.</p>
+              <div class="sys-diagram">
+                <span class="node">Player moves 20+ units</span> <span class="arrow">→</span>
+                <span class="node">LoadSectorsAround()</span> <span class="arrow">→</span>
+                <span class="node">GenerateSector (seed = x·73856093 ^ y·19349663)</span> <span class="arrow">→</span>
+                <span class="node">Spawn planet + name</span> <span class="arrow">→</span>
+                <span class="node">UnloadDistantSectors()</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- breakdown -->
+    </div><!-- proj-content -->
+  </div><!-- Space Wars: Salvage -->
 
   <!-- ══ CROSSY RAILROAD ══ -->
   <span id="crossy"></span><span id="crossy-railroad"></span>
